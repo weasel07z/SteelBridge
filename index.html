@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steel Bridge CSV Uploader</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Steel Bridge CSV Uploader</h1>
+        <p>Enter your name: </p>
+        <input type="text" id="name"> 
+        <p>Enter your score: </p>
+        <input type="text" id="score">
+        <label for="file-upload" class="custom-file-upload">
+            File Upload
+        </label>
+        <input id="file-upload" type="file" />
+        <button id="uploadButton">Upload</button>
+        <div class="leaderboard">
+            <h1>Leaderboard</h1>
+            <ul id="leaderboardList"></ul>
+        </div>
+    </div>
+    
+</body>
+<script type="module" src="index.js"></script>
+<script src="script.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</html>

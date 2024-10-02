@@ -1,0 +1,7 @@
+{
+    "type": "module",
+    "dependencies": {
+        "csv-parser": "^3.0.0",
+        "firebase": "^10.13.2"
+    }
+}
