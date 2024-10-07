@@ -3,28 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steel Bridge CSV Uploader</title>
+    <title>Bridge Cost Calculator</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Steel Bridge CSV Uploader</h1>
-        <p>Enter your name: </p>
+    <div class="centered-section">
+        <h1>Bridge Cost Calculator</h1>
+    
+        <label for="name">Enter your name:</label>
         <input type="text" id="name"> 
-        <p>Enter your score: </p>
-        <input type="text" id="score">
-        <label for="file-upload" class="custom-file-upload">
-            File Upload
-        </label>
-        <input id="file-upload" type="file" />
-        <button id="uploadButton">Upload</button>
+        <br><br>
+    
+        <label for="bridgeWeight">Enter the weight of your bridge (in lbs):</label>
+        <input type="number" id="bridgeWeight" placeholder="Bridge Weight" required>
+        <br><br>
+    
+        <label for="bridgeSide">Select the side of the bridge:</label>
+        <select id="bridgeSide">
+            <option value="North">North</option>
+            <option value="South">South</option>
+        </select>
+        <br><br>
+    
+        <label for="csvFileInput">Upload JointData CSV:</label>
+        <input type="file" id="csvFileInput" accept=".csv" />
+        <br><br>
+    
+        <button id="uploadButton" onclick="processFile()">Calculate U3 Average and Cost</button>
+    
+        <h2>Results</h2>
+        <p id="output"></p>
+        <p id="cost"></p>
+    </div>
+     <!-- Leaderboard Section -->
+     <div class="leaderboard-container">
         <div class="leaderboard">
-            <h1>Leaderboard</h1>
-            <ul id="leaderboardList"></ul>
+            <h2>North Leaderboard</h2>
+            <ul id="northLeaderboardList"></ul>
+        </div>
+        <div class="leaderboard">
+            <h2>South Leaderboard</h2>
+            <ul id="southLeaderboardList"></ul>
         </div>
     </div>
-    
+
+    <!-- PapaParse Script to Parse CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script type="module" src="index.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        function processFile() {
+            const fileInput = document.getElementById('csvFileInput');
+            const bridgeWeightInput = document.getElementById('bridgeWeight');
+            const bridgeSideInput = document.getElementById('bridgeSide');
+            const output = document.getElementById('output');
+            const costed = document.getElementById('cost');
+
+            // Get the bridge weight and side values
+            const bridgeWeight = parseFloat(bridgeWeightInput.value);
+            const bridgeSide = bridgeSideInput.value;  // "North" or "South"
+
+            if (isNaN(bridgeWeight) || bridgeWeight <= 0) {
+                alert('Please enter a valid bridge weight.');
+                return;
+            }
+
+            if (fileInput.files.length === 0) {
+                alert('Please upload a CSV file.');
+                return;
+            }
+            
+            // if (document.getElementById("name").value === "RESET") {
+            //     // Display a confirmation popup
+            //     if (confirm('Are you sure you want to reset the database? This action cannot be undone.')) {
+            //         // If the user confirms (clicks "OK"), continue with the reset action
+            //         alert('Database has been reset');
+            //         return;
+            //     } else {
+            //         return;
+            //     }
+            // }
+            window.isResetConfirmed = false;
+
+            if (document.getElementById("name").value === "RESET") {
+                // Display a confirmation popup
+                if (confirm('Are you sure you want to reset the database? This action cannot be undone.')) {
+                    alert('Database has been reset');
+                    window.isResetConfirmed = true;  // Set to true if the user confirms
+                } else {
+                    alert('Database reset canceled.');
+                    window.isResetConfirmed = false;  // Set to false if the user cancels
+                }
+            }
+
+            if(document.getElementById("name").value == "RESET") {
+                output.innerHTML = "";
+                costed.innerHTML = "";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            
+            // Parse CSV using PapaParse
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    const data = results.data;
+
+                    // Prepare to collect U3 values and filter the rows
+                    let u3_values = [];
+                    
+                    for (let row of data) {
+                        const jointValue = parseInt(row['Joint']);
+                        const outputCaseValue = `LCB${jointValue - 3}`;
+
+                        // Ensure 'U3' and 'OutputCase' exist and match the condition
+                        if (row['U3'] && row['OutputCase'].trim() === outputCaseValue) {
+                            const u3Value = parseFloat(row['U3']) * 12;  // Multiply U3 by 12
+                            if (!isNaN(u3Value)) {
+                                u3_values.push(u3Value);
+                            }
+                        }
+                    }
+
+                    // Calculate the average U3 value
+                    if (u3_values.length > 0) {
+                        const sum = u3_values.reduce((a, b) => a + b, 0);
+                        const averageU3 = (sum / u3_values.length)*(-1);
+
+                        // Calculate the cost of the bridge
+                        const cost = (averageU3 * 4250000) + (Math.pow(bridgeWeight, 2.11) * 15);
+
+                        // Output both the bridge weight, the average U3 value, and the calculated cost
+                        output.innerHTML = `
+                            <strong>Side of the Bridge:</strong> ${bridgeSide}<br>
+                            <strong>Bridge Weight:</strong> ${bridgeWeight} lbs<br>
+                            <strong>Average U3 Value:</strong> ${averageU3.toFixed(2)} inches<br>
+                            <strong>Estimated Bridge Cost:</strong> $${cost.toFixed(2)}
+                        `;
+                        costed.innerHTML = `${cost.toFixed(2)}`;
+                    } else {
+                        output.innerHTML = 'No valid U3 values found in the file.';
+                    }
+                }
+            });
+        }
+
+        
+    </script>
 </body>
-<script type="module" src="index.js"></script>
-<script src="script.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
 </html>

@@ -1,62 +1,134 @@
-.container {
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+.center {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
-button {
-    border: 1px solid #000000;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    background-color: #FFFFFF;
-}
-input {
-    padding: 10px;
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
-input[type="file"] {
-    display: none;
-}
-.custom-file-upload {
-    border: 1px solid #000000;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    margin: 20px;
-}
-.custom-file-upload:hover, button:hover{
-    background-color: #cbcbcb;
-}
-.custom-file-upload:active, button:active{
-    background-color: #848484;
-    color: rgb(255, 255, 255);
-}
-li {
-    list-style-type: none;
-    border-bottom: 1px solid #000000;
-    padding: 10px;
-}
-.leaderboard li:last-child {
-    border-bottom: none;
-  }
 
-#leaderboardList {
-    list-style: none;
+/* Headings */
+h1 {
+    font-size: 36px;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 28px;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+/* Input Section */
+.input-section {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-section label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #4A90E2;
+}
+
+.input-section input, 
+.input-section select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Button Styling */
+.primary-button {
+    background-color: #4A90E2;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.primary-button:hover {
+    background-color: #357ABD;
+}
+
+.file-upload {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Leaderboard Section */
+.leaderboard-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.leaderboard {
+    width: 48%;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard ul {
+    list-style-type: none;
     padding: 0;
-    width: 500px;
 }
 
 .leaderboard li {
+    background-color: #fff;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
-    padding: 20px;
-    border-bottom: 2px solid #000000;
-    color:#000000;
-    font-size: 20px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    transition: background-color 0.2s ease;
 }
-h1{
-    font-size: 40px;
-    color: #000000;
-    text-align: center;
+
+.leaderboard li:hover {
+    background-color: #f1f1f1;
+}
+
+/* Results Section */
+.results {
+    margin-top: 20px;
+}
+
+.results p {
+    font-size: 18px;
+    color: #333;
 }
