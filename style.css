@@ -132,3 +132,7 @@ h2 {
     font-size: 18px;
     color: #333;
 }
+
+#cost {
+    display: none;
+}
